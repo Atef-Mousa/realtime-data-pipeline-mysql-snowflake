@@ -63,24 +63,16 @@ Kafka Topics (Change Events)
 git clone https://github.com/Atef-Mousa/realtime-data-pipeline-mysql-snowflake.git
 cd realtime-data-pipeline-mysql-snowflake
 
-2. Start all services
-bash
-Copy
-Edit
+### 2. Start all services
 docker-compose up -d
-3. Initialize MySQL (optional)
-Exec into the MySQL container and apply the schema:
 
-bash
-Copy
-Edit
+### 3. Initialize MySQL (optional)
+Exec into the MySQL container and apply the schema:
 docker exec -i mysql mysql -uroot -p123456 < init-mysql/init.sql
-4. Register connectors
+
+### 4. Register connectors
 Use curl or Postman to create the connectors:
 
-bash
-Copy
-Edit
 curl -X POST -H "Content-Type: application/json" \
 --data @connectors/mysql-source.json \
 http://localhost:8083/connectors
@@ -88,7 +80,8 @@ http://localhost:8083/connectors
 curl -X POST -H "Content-Type: application/json" \
 --data @connectors/snowflake-sink.json \
 http://localhost:8083/connectors
-📊 Sample Use Case: E-Commerce Orders
+### 📊 Sample Use Case: E-Commerce Orders
+
 When a new order is inserted into MySQL, it's streamed in real-time to Kafka.
 
 Kafka Connect ingests this into Snowflake's raw table.
