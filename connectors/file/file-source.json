@@ -1,0 +1,14 @@
+
+{
+  "name": "file-source",
+  "config": {
+    "connector.class": "org.apache.kafka.connect.file.FileStreamSourceConnector",
+    "file": "/tmp/misc/log-sample.txt",
+    "topic": "file-log-source",
+    "name": "file-source",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.storage.StringConverter"
+  }
+}
+
+
