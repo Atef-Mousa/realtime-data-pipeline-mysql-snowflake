@@ -57,50 +57,88 @@ Snowflake
 
 ## 🛠️ Setup Instructions
 
-## Clone the repo
-
-```bash
+1. Clone repository
+bash
 git clone https://github.com/Atef-Mousa/realtime-data-pipeline-mysql-snowflake.git
 cd realtime-data-pipeline-mysql-snowflake
-
-
-## Start all services
-
+2. Start services
 bash
-Copy
-Edit
 docker-compose up -d
-
-## Initialize MySQL (optional)
-Exec into the MySQL container and apply the schema:
-
+3. Initialize MySQL (optional)
 bash
-Copy
-Edit
 docker exec -i mysql mysql -uroot -p123456 < init-mysql/init.sql
-
-##  Register connectors
-
-Use curl or Postman to create the connectors:
-
+4. Register connectors
 bash
-Copy
-Edit
+# Register MySQL source
 curl -X POST -H "Content-Type: application/json" \
 --data @connectors/mysql-source.json \
 http://localhost:8083/connectors
 
+# Register Snowflake sink
 curl -X POST -H "Content-Type: application/json" \
 --data @connectors/snowflake-sink.json \
 http://localhost:8083/connectors
 📊 Sample Use Case: E-Commerce Orders
-When a new order is inserted into MySQL, it's streamed in real-time to Kafka.
-Kafka Connect ingests this into Snowflake's raw table.
-Snowflake can then transform this into analytics tables or Power BI dashboards.
+New order inserted in MySQL → Streamed to Kafka → Loaded to Snowflake
+
+Enables real-time dashboards in BI tools like Power BI
+
+Supports analytics on fresh data without batch delays
 
 🔍 Monitoring & Debugging
 Kafka UI: http://localhost:8080
 
-Kafka Connect logs: docker logs connect
-
 Schema Registry: http://localhost:8081
+
+View Kafka Connect logs:
+
+bash
+docker logs connect
+Check connector status:
+
+bash
+curl http://localhost:8083/connectors | jq
+⚠️ Important Notes
+Configure Snowflake credentials in snowflake-sink.json
+
+Allow network access from Kafka Connect to Snowflake
+
+Verify table auto-creation in Snowflake or pre-create tables
+
+Monitor Snowflake stages via LIST @<your_stage>;
+
+text
+
+## Key Components Explained
+
+1. **Debezium Source Connector**:
+   - Monitors MySQL binlog for changes
+   - Publishes events to Kafka topics in Avro format
+   - Schema Registry tracks schema evolution
+
+2. **Snowflake Sink Connector**:
+   - Auto-creates tables matching Kafka topics
+   - Uses Snowpipe for continuous loading
+   - Writes to internal stages before loading
+
+3. **Data Flow**:
+   ```mermaid
+   sequenceDiagram
+       MySQL->>Debezium: Row Change
+       Debezium->>Kafka: Avro Message
+       Kafka->>Snowflake Connector: Poll Events
+       Snowflake Connector->>Snowflake: COPY INTO TABLE
+Performance Considerations
+Tune batch.size and max.poll.records in sink config
+
+Use Snowflake medium/large warehouses for heavy loads
+
+Monitor Kafka consumer lag via Kafka UI
+
+For production deployments, consider:
+
+Adding authentication to Kafka Connect REST API
+
+Implementing error handling with dead-letter queues
+
+Setting up monitoring with Prometheus/Grafana
