@@ -57,20 +57,20 @@ Kafka Topics (Change Events)
 
 ## 🛠️ Setup Instructions
 
-### 1. Clone the repo
+## 1. Clone the repo
 
 ```bash
 git clone https://github.com/Atef-Mousa/realtime-data-pipeline-mysql-snowflake.git
 cd realtime-data-pipeline-mysql-snowflake
 
-### 2. Start all services
+## 2. Start all services
 docker-compose up -d
 
-### 3. Initialize MySQL (optional)
+## 3. Initialize MySQL (optional)
 Exec into the MySQL container and apply the schema:
 docker exec -i mysql mysql -uroot -p123456 < init-mysql/init.sql
 
-### 4. Register connectors
+## 4. Register connectors
 Use curl or Postman to create the connectors:
 
 curl -X POST -H "Content-Type: application/json" \
@@ -88,7 +88,7 @@ Kafka Connect ingests this into Snowflake's raw table.
 
 Snowflake can then transform this into analytics tables or Power BI dashboards.
 
-🔍 Monitoring & Debugging
+## 🔍 Monitoring & Debugging
 Kafka UI: http://localhost:8080
 
 Kafka Connect logs: View with docker logs connect
