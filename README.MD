@@ -57,21 +57,21 @@ Snowflake
 
 ## 🛠️ Setup Instructions
 
-## 1. Clone the repo
+## step 1. Clone the repo
 
 ```bash
 git clone https://github.com/Atef-Mousa/realtime-data-pipeline-mysql-snowflake.git
 cd realtime-data-pipeline-mysql-snowflake
 
 
-## 2. Start all services
+## step 2. Start all services
 
 bash
 Copy
 Edit
 docker-compose up -d
 
-## 3. Initialize MySQL (optional)
+## step 3. Initialize MySQL (optional)
 Exec into the MySQL container and apply the schema:
 
 bash
@@ -79,7 +79,7 @@ Copy
 Edit
 docker exec -i mysql mysql -uroot -p123456 < init-mysql/init.sql
 
-## 4. Register connectors
+## step 4. Register connectors
 
 Use curl or Postman to create the connectors:
 
